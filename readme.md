@@ -291,7 +291,7 @@ Check [this example](https://reactrouter.com/en/main/hooks/use-params) if you ne
 
 To get the beer details, you need to make a `GET` request to the Beers API endpoint `https://f5-beers-065cad3017be.herokuapp.com/beers/:id`, where `:id` should be replaced with the id of the selected beer.
 
-**Example:** [https://f5-beers-065cad3017be.herokuapp.com/beers/**5fb6a86265b9c209606e10e2**](https://ih-beers-api2.herokuapp.com/beers/5fb6a86265b9c209606e10e2)
+**Example:** [https://f5-beers-065cad3017be.herokuapp.com/beers/**64acfe1efebd5d00024c336d**](https://f5-beers-065cad3017be.herokuapp.com/beers/64acfe1efebd5d00024c336d)
 
 Remember to **`console.log`** the response data to help you visualize the structure of the beer object and how the data is structured.
 
