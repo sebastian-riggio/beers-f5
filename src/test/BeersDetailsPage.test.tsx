@@ -1,9 +1,10 @@
 import { describe, test, expect, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, RouterProvider, createMemoryRouter } from "react-router-dom";
 import nock, { Scope } from "nock";
 import axios from "axios";
-import App from "../App";
+import { BeersDetailPage } from "../pages/BeersDetailPage";
+import { routerConfig } from "../router/routerConfig";
 
 const API_URL = "https://f5-beers-065cad3017be.herokuapp.com";
 
@@ -31,11 +32,11 @@ describe("Iteration 5", () => {
 
     beforeEach(() => {
       scope = nock(API_URL).get("/beers/a1").reply(200, beer);
-
+      const router = createMemoryRouter (routerConfig, {
+        initialEntries: ['/beers/a1']
+      })
       render(
-        <MemoryRouter initialEntries={["/beers/a1"]}>
-          <App />
-        </MemoryRouter>
+        <RouterProvider router={router} />
       );
     });
 

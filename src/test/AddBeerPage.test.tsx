@@ -32,49 +32,49 @@ describe("Iteration 7", () => {
     });
 
     test("renders the 'name' input field", async () => {
-      const nameInput = screen.getByRole('input',{name:"name"});
+      const nameInput = screen.findByRole('input',{name:"name"});
       await waitFor(() => {
         expect(nameInput).not.toBeNull();
       });
     });
 
     test("renders the 'tagline' input field", async () => {
-      const taglineInput = screen.getByRole('input',{name:"tagline"});
+      const taglineInput = screen.findByRole('input',{name:"tagline"});
       await waitFor(() => {
         expect(taglineInput).not.toBeNull();
       });
     });
 
     test("renders the 'description' input field", async () => {
-      const descriptionInput = screen.getByRole('textarea',{name:"description"});
+      const descriptionInput = screen.findByRole('textarea',{name:"description"});
       await waitFor(() => {
         expect(descriptionInput).not.toBeNull();
       });
     });
 
     test("renders the 'first_brewed' input field", async () => {
-      const firstBrewedInput = screen.getByRole('input',{name:'first_brewed'});
+      const firstBrewedInput = screen.findByRole('input',{name:'first_brewed'});
       await waitFor(() => {
         expect(firstBrewedInput).not.toBeNull();
       });
     });
 
     test("renders the 'brewers_tips' input field", async () => {
-      const brewersTipsInput = screen.getByRole('input',{name:"brewers_tips"});
+      const brewersTipsInput = screen.findByRole('input',{name:"brewers_tips"});
       await waitFor(() => {
         expect(brewersTipsInput).not.toBeNull();
       });
     });
 
     test("renders the 'contributed_by' input field", async () => {
-      const contributedByInput = screen.getByRole('input',{name:"contributed_by"});
+      const contributedByInput = screen.findByRole('input',{name:"contributed_by"});
       await waitFor(() => {
         expect(contributedByInput).not.toBeNull();
       });
     });
 
     test("renders the 'attenuation_level' input field", async () => {
-      const attenuationInput = screen.getByRole('input',{name:"attenuation_level"});
+      const attenuationInput = screen.findByRole('input',{name:"attenuation_level"});
       await waitFor(() => {
         expect(attenuationInput).not.toBeNull();
       });
@@ -88,44 +88,42 @@ describe("Iteration 7", () => {
       });
     });
 
-    test("sends form values to the API via POST request when the form is submitted", async () => {
-      let requestBody;
-      const scope = nock(API_URL)
-          .post("/beers", (body: RequestBodyMatcher) => {
-              requestBody = body;
-              return true;
-          })
-          .reply(200,{});
+   test("sends form values to the API via POST request when the form is submitted", async () => {
+  let requestBody;
+  const scope = nock(API_URL)
+    .post("/beers", (body: RequestBodyMatcher) => {
+      requestBody = body;
+      return true;
+    })
+    .reply(200, {});
 
-      const nameInput = screen.queryByRole('input',{name:"name"}) as HTMLElement;
-      const taglineInput = screen.queryByRole('input',{name:"tagline"}) as HTMLElement;
-      const descriptionInput = screen.queryByRole('textarea',{name:"description"}) as HTMLElement;
-      const firstBrewedInput = screen.queryByRole('input',{name:"first_brewed"}) as HTMLElement;
-      const brewersTipsInput = screen.queryByRole('input',{name:"rewers_tips"}) as HTMLElement;
-      const contributedByInput = screen.queryByRole('input',{name:"ontributed_by"}) as HTMLElement;
-      const attenuationInput = screen.queryByRole('input',{name:"ttenuation_level"}) as HTMLElement;
+  const nameInput = screen.getByRole("textbox", { name: /name/i });
+  const taglineInput = screen.getByRole("textbox", { name: /tagline/i });
+  const descriptionInput = screen.getByRole("textbox", { name: /description/i });
+  const firstBrewedInput = screen.getByRole("textbox", { name: /first brewed/i });
+  const brewersTipsInput = screen.getByRole("textbox", { name: /brewer's tips/i });
+  const contributedByInput = screen.getByRole("textbox", { name: /contributed by/i });
+  const attenuationInput = screen.getByRole("spinbutton", { name: /attenuation level/i });
 
-      await userEvent.type(nameInput, newBeer.name);
-      await userEvent.type(taglineInput,newBeer.tagline);
-      await userEvent.type(descriptionInput,newBeer.description);
-      await userEvent.type(firstBrewedInput,newBeer.first_brewed);
-      await userEvent.type(brewersTipsInput,newBeer.brewers_tips);
-      await userEvent.type(contributedByInput,newBeer.contributed_by);
-      await userEvent.type(attenuationInput,newBeer.attenuation_level.toString());
+  await userEvent.type(nameInput, newBeer.name);
+  await userEvent.type(taglineInput, newBeer.tagline);
+  await userEvent.type(descriptionInput, newBeer.description);
+  await userEvent.type(firstBrewedInput, newBeer.first_brewed);
+  await userEvent.type(brewersTipsInput, newBeer.brewers_tips);
+  await userEvent.type(contributedByInput, newBeer.contributed_by);
+  await userEvent.type(attenuationInput, newBeer.attenuation_level.toString());
 
-      await userEvent.click(screen.getByRole("button", { name: /add beer/i }));
+  userEvent.click(screen.getByRole("button", { name: /add beer/i }));
 
-      scope.done();
-
-      expect(requestBody.name).toBe(newBeer.name);
-      expect(requestBody.tagline).toBe(newBeer.tagline);
-      expect(requestBody.description).toBe(newBeer.description);
-      expect(requestBody.first_brewed).toBe(newBeer.first_brewed);
-      expect(requestBody.brewers_tips).toBe(newBeer.brewers_tips);
-      expect(requestBody.attenuation_level).toBe(
-        String(newBeer.attenuation_level)
-      );
-      expect(requestBody.brewers_tips).toBe(newBeer.brewers_tips);
-    });
+  await waitFor(() => {
+    expect(scope.isDone()).toBeTruthy();
   });
+
+  expect(requestBody.name).toBe(newBeer.name);
+  expect(requestBody.tagline).toBe(newBeer.tagline);
+  expect(requestBody.description).toBe(newBeer.description);
+  expect(requestBody.first_brewed).toBe(newBeer.first_brewed);
+  expect(requestBody.brewers_tips).toBe(newBeer.brewers_tips);
+  expect(requestBody.attenuation_level).toBe(String(newBeer.attenuation_level));
+  expect(requestBody.contributed_by).toBe(newBeer.contributed_by);
 });
